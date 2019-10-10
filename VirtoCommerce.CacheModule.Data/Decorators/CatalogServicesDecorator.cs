@@ -66,6 +66,20 @@ namespace VirtoCommerce.CacheModule.Data.Decorators
             return retVal;
         }
 
+        public CatalogProduct GetByCode(string itemCode, ItemResponseGroup respGroup, string catalogId = null)
+        {
+            var cacheKey = GetCacheKey("ItemService.GetByCode", itemCode, respGroup.ToString(), catalogId);
+            var retVal = _cacheManager.Get(cacheKey, RegionName, () => _itemService.GetByCode(itemCode, respGroup, catalogId));
+            return retVal;
+        }
+
+        public CatalogProduct[] GetByCodes(string[] itemCodes, ItemResponseGroup respGroup, string catalogId = null)
+        {
+            var cacheKey = GetCacheKey("ItemService.GetByCodes", string.Join(", ", itemCodes), respGroup.ToString(), catalogId);
+            var retVal = _cacheManager.Get(cacheKey, RegionName, () => _itemService.GetByCodes(itemCodes, respGroup, catalogId));
+            return retVal;
+        }
+
         public void Update(CatalogProduct[] items)
         {
             _itemService.Update(items);
